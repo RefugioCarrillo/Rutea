@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_explora"
+        android:icon="@drawable/ic_explore"
+        android:title="Explorar Rutas" />
+
+    <item
+        android:id="@+id/nav_principal"
+        android:icon="@drawable/ic_home"
+        android:title="Ruta Actual" />
+
+    <item
+        android:id="@+id/nav_opiniones"
+        android:icon="@drawable/ic_vew"
+    android:title="Opiniones" />
+
+    <item
+        android:id="@+id/nav_login"
+        android:icon="@drawable/ic_login"
+    android:title="Iniciar Sesión" />
+</menu>

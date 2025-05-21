@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Rutea</string>
+    <string name="desc_buscar_icono">Icono de búsqueda</string>
+    <string name="desc_logo">somos rutea</string>
+    <string name="desc_filtro">filtro para busquedas avanzadas</string>
+
 </resources>
