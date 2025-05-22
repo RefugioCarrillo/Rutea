@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "467963379809",
+    "project_id": "rutea-c42ca",
+    "storage_bucket": "rutea-c42ca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467963379809:android:2a996d702fdba3851a2a20",
+        "android_client_info": {
+          "package_name": "com.example.rutea"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWlqMpYERJ2MpEru6lmgj0fGpWt7zGWXA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
