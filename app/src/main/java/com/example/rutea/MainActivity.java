@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsetsController;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,9 +13,20 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    RecyclerView recyclerView;
+    RutaAdapter adapter;
+    List<Ruta> rutaList;
+    FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,26 +37,25 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        recyclerView = findViewById(R.id.visor);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        rutaList = new ArrayList<>();
+        adapter = new RutaAdapter(rutaList);
+        recyclerView.setAdapter(adapter);
 
-        Window window = getWindow();
+        db = FirebaseFirestore.getInstance();
 
-        // Cambiar color de la barra de estado
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(ContextCompat.getColor(this, R.color.verde));
-            window.setNavigationBarColor(ContextCompat.getColor(this, R.color.verde));
-        }
+        db.collection("rutas")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        Ruta ruta = doc.toObject(Ruta.class);
+                        rutaList.add(ruta);
+                    }
+                    adapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
 
-        // Para que los íconos de la barra se vean blancos (en lugar de oscuros)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            getWindow().getInsetsController().setSystemBarsAppearance(
-                    0,
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
-            );
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // API 23-29
-            View decor = getWindow().getDecorView();
-            decor.setSystemUiVisibility(0); // Remueve íconos oscuros
-        }
 
     }
 }
