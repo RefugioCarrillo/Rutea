@@ -7,40 +7,73 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.rutea.R;
-import com.example.rutea.Ruta;
+import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.List;
 
-public class RutaAdapter extends RecyclerView.Adapter<RutaAdapter.RutaViewHolder> {
+public class RutaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int TYPE_CARRUSEL = 0;
+    private static final int TYPE_RUTA = 1;
 
     private List<Ruta> rutaList;
+    private List<Integer> carruselImages; // Ej: Arrays.asList(R.drawable.img1, R.drawable.img2)
 
-    public RutaAdapter(List<Ruta> rutaList) {
+    public RutaAdapter(List<Ruta> rutaList, List<Integer> carruselImages) {
         this.rutaList = rutaList;
-    }
-
-    @NonNull
-    @Override
-    public RutaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ruta, parent, false);
-        return new RutaViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RutaViewHolder holder, int position) {
-        Ruta ruta = rutaList.get(position);
-        holder.tvNombreRuta.setText(ruta.getNombre());
-        holder.tvDescripcion.setText(ruta.getDescripcion());
-        holder.tvLugar.setText(ruta.getLugar());
+        this.carruselImages = carruselImages;
     }
 
     @Override
     public int getItemCount() {
-        return rutaList.size();
+        return rutaList.size() + 1; // +1 para el carrusel
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position == 0 ? TYPE_CARRUSEL : TYPE_RUTA;
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+        if (viewType == TYPE_CARRUSEL) {
+            View view = inflater.inflate(R.layout.item_carrusel, parent, false);
+            return new CarruselViewHolder(view);
+        } else {
+            View view = inflater.inflate(R.layout.item_ruta, parent, false);
+            return new RutaViewHolder(view);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == TYPE_CARRUSEL) {
+            CarruselViewHolder carruselHolder = (CarruselViewHolder) holder;
+            CarruselAdapter carruselAdapter = new CarruselAdapter(carruselImages);
+            carruselHolder.viewPager.setAdapter(carruselAdapter);
+        } else {
+            RutaViewHolder rutaHolder = (RutaViewHolder) holder;
+            Ruta ruta = rutaList.get(position - 1); // Desfase por carrusel
+            rutaHolder.tvNombreRuta.setText(ruta.getNombre());
+            rutaHolder.tvDescripcion.setText(ruta.getDescripcion());
+            rutaHolder.tvLugar.setText(ruta.getLugar());
+        }
+    }
+
+    // ViewHolder para el carrusel
+    public static class CarruselViewHolder extends RecyclerView.ViewHolder {
+        ViewPager2 viewPager;
+
+        public CarruselViewHolder(@NonNull View itemView) {
+            super(itemView);
+            viewPager = itemView.findViewById(R.id.viewPager);
+        }
+    }
+
+    // ViewHolder para rutas
     public static class RutaViewHolder extends RecyclerView.ViewHolder {
         TextView tvNombreRuta, tvDescripcion, tvLugar;
 
