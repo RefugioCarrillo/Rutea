@@ -36,6 +36,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        BottomNavigationView bottomNav = findViewById(R.id.menu);
+
+// Recorre cada item del BottomNavigationView
+        for (int i = 0; i < bottomNav.getMenu().size(); i++) {
+            final View iconView = bottomNav.findViewById(bottomNav.getMenu().getItem(i).getItemId());
+
+            if (iconView != null) {
+                iconView.post(() -> {
+                    // Encuentra el ícono dentro del item
+                    View icon = iconView.findViewById(com.google.android.material.R.id.icon);
+                    if (icon != null) {
+                        // Cambiar tamaño del ícono
+                        int sizeInPx = (int) getResources().getDisplayMetrics().density * 32; // 32dp
+                        icon.getLayoutParams().height = sizeInPx;
+                        icon.getLayoutParams().width = sizeInPx;
+                        icon.requestLayout();
+                    }
+                });
+            }
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

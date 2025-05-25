@@ -8,6 +8,18 @@
     android:background="#4E6813"
     tools:context=".login">
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/menu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#4E6813"
+        app:itemIconTint="@color/colorstatelist"
+        app:itemTextColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/menu_navegar" />
+
     <TextView
         android:id="@+id/textView6"
         android:layout_width="633dp"
@@ -20,17 +32,5 @@
         android:textStyle="bold"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="2dp" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/menu"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="#4E6813"
-        app:itemIconTint="@null"
-        app:itemTextColor="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_navegar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

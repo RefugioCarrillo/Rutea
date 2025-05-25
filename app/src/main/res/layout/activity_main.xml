@@ -98,6 +98,8 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <!-- Lista de elementos (RecyclerView) -->
+
+    <!-- Navegación inferior -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/visor"
         android:layout_width="0dp"
@@ -105,17 +107,18 @@
         android:background="#F0E7DA"
         app:layout_constraintBottom_toTopOf="@id/menu"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView2" />
+        app:layout_constraintTop_toBottomOf="@id/textView2"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <!-- Navegación inferior -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#4E6813"
-        app:itemIconTint="@null"
-        app:itemTextColor="@null"
+        app:itemIconTint="@color/colorstatelist"
+        app:itemTextColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
