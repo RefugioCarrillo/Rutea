@@ -137,6 +137,12 @@ public class MainActivity extends AppCompatActivity {
 
             return false;
         });
+// espacio entre tarjetas (item decoration)
+        int spaceInDp = 8; // puedes ajustar este valor
+        float scale = getResources().getDisplayMetrics().density;
+        int spaceInPx = (int) (spaceInDp * scale + 0.5f);
+
+        recyclerView.addItemDecoration(new SpaceItemDecoration(spaceInPx));
 
 
     }
