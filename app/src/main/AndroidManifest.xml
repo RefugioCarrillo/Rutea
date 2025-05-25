@@ -15,10 +15,13 @@
         android:theme="@style/Theme.Rutea"
         tools:targetApi="31">
         <activity
-            android:name=".login"
+            android:name=".opiniones"
             android:exported="false" />
         <activity
-            android:name=".lugares"
+            android:name=".RutaActual"
+            android:exported="false" />
+        <activity
+            android:name=".login"
             android:exported="false" />
 
         <activity
@@ -34,7 +37,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
     </application>
 
 </manifest>

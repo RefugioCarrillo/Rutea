@@ -6,20 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#4E6813"
-    tools:context=".login">
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="633dp"
-        android:layout_height="770dp"
-        android:background="#F0E7DA"
-        android:text="               login"
-        android:textAlignment="textStart"
-        android:textColor="#020000"
-        android:textSize="34sp"
-        android:textStyle="bold"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="2dp" />
+    tools:context=".RutaActual">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menu"
@@ -33,4 +20,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu_navegar" />
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="633dp"
+        android:layout_height="770dp"
+        android:background="#F0E7DA"
+        android:text="               ruta actual"
+        android:textAlignment="textStart"
+        android:textColor="#020000"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="2dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
