@@ -3,8 +3,6 @@ package com.example.rutea;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -17,7 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,18 +37,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
         BottomNavigationView bottomNav = findViewById(R.id.menu);
 
-// Recorre cada item del BottomNavigationView
+        // Ajustar iconos del menú inferior
         for (int i = 0; i < bottomNav.getMenu().size(); i++) {
             final View iconView = bottomNav.findViewById(bottomNav.getMenu().getItem(i).getItemId());
 
             if (iconView != null) {
                 iconView.post(() -> {
-                    // Encuentra el ícono dentro del item
                     View icon = iconView.findViewById(com.google.android.material.R.id.icon);
                     if (icon != null) {
-                        // Cambiar tamaño del ícono
                         int sizeInPx = (int) getResources().getDisplayMetrics().density * 32; // 32dp
                         icon.getLayoutParams().height = sizeInPx;
                         icon.getLayoutParams().width = sizeInPx;
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         // Lista de rutas
         rutaList = new ArrayList<>();
 
-        // Lista de imágenes para el carrusel (recuerda tener estas imágenes en drawable)
+        // Imágenes del carrusel
         carruselImages = Arrays.asList(
                 R.drawable.c1,
                 R.drawable.c2,
@@ -82,51 +82,51 @@ public class MainActivity extends AppCompatActivity {
                 R.drawable.c9,
                 R.drawable.c10,
                 R.drawable.c11
-
         );
 
-        // Inicializar el adapter con rutas vacías e imágenes del carrusel
+        // Inicializar adapter
         adapter = new RutaAdapter(rutaList, carruselImages);
         recyclerView.setAdapter(adapter);
 
-        // Firebase Firestore
+        // Inicializar Firestore
         db = FirebaseFirestore.getInstance();
+
+        // 🔄 Escuchar en tiempo real los cambios en la colección "rutas"
         db.collection("rutas")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                        Ruta ruta = doc.toObject(Ruta.class);
-                        rutaList.add(ruta);
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Toast.makeText(MainActivity.this, "Error al cargar datos: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        // Limpiar lista para evitar duplicados
+                        rutaList.clear();
+
+                        for (DocumentSnapshot doc : snapshots.getDocuments()) {
+                            Ruta ruta = doc.toObject(Ruta.class);
+                            rutaList.add(ruta);
+                        }
+
+                        adapter.notifyDataSetChanged();
                     }
-                    adapter.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                );
+                });
 
-        // para abrir cada actividad de la aplicación
+        // Navegación del menú inferior
+        bottomNav.setSelectedItemId(R.id.explorarRuta); // pantalla inicial
 
-        //1_declaracion del menu
-        BottomNavigationView menu = findViewById(R.id.menu);
-
-        //2_ seleccion por defecto del item del menu explorar ruta que muestre la pantalla principal
-        menu.setSelectedItemId(R.id.explorarRuta); // el menu inicia en esta pantalla
-
-        //3_metodo de optencion del id para saber si el usuario cambia de icono
-        menu.setOnItemSelectedListener(item -> {
+        bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
 
-            //4_navegacion del menu mediante su id de cada icono para cambio de pantallas
             if (id == R.id.explorarRuta) {
-                return true; //  esta pantalla sera la inicial
+                return true;
             } else if (id == R.id.rutaActual) {
                 startActivity(new Intent(MainActivity.this, RutaActual.class));
-                //animacion para no mostrar un cambio tan brusco
                 overridePendingTransition(0, 0);
                 return true;
             } else if (id == R.id.login) {
                 startActivity(new Intent(MainActivity.this, login.class));
-                //animacion para no mostrar un cambio tan brusco
                 overridePendingTransition(0, 0);
                 return true;
             } else if (id == R.id.opiniones) {
@@ -137,13 +137,11 @@ public class MainActivity extends AppCompatActivity {
 
             return false;
         });
-// espacio entre tarjetas (item decoration)
-        int spaceInDp = 8; // puedes ajustar este valor
+
+        // Espacio entre tarjetas
+        int spaceInDp = 8;
         float scale = getResources().getDisplayMetrics().density;
         int spaceInPx = (int) (spaceInDp * scale + 0.5f);
-
         recyclerView.addItemDecoration(new SpaceItemDecoration(spaceInPx));
-
-
     }
 }
